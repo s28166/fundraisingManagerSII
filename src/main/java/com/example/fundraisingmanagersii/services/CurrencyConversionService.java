@@ -30,9 +30,9 @@ public class CurrencyConversionService {
             DecimalFormat df = new DecimalFormat();
             df.setMaximumFractionDigits(2);
             df.setMinimumFractionDigits(0);
-            System.out.println("Plain Big Decimal: " + convertedAmount.toPlainString());
-            System.out.println("Scaled Big Decimal: " + convertedAmount.setScale(2, RoundingMode.DOWN));
-            System.out.println("Formatted Big Decimal: " + df.format(convertedAmount));
+//            System.out.println("Plain Big Decimal: " + convertedAmount.toPlainString());
+//            System.out.println("Scaled Big Decimal: " + convertedAmount.setScale(2, RoundingMode.DOWN));
+//            System.out.println("Formatted Big Decimal: " + df.format(convertedAmount));
             return convertedAmount.setScale(2, RoundingMode.DOWN);
         } catch (IOException e){
             throw new ConversionException(e.getMessage());

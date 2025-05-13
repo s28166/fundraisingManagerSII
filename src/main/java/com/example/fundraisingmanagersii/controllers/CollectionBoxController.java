@@ -1,4 +1,4 @@
-package com.example.fundraisingmanagersii.controller;
+package com.example.fundraisingmanagersii.controllers;
 
 import com.example.fundraisingmanagersii.dtos.CollectionBoxGetDto;
 import com.example.fundraisingmanagersii.dtos.MoneyAddRequestDto;
@@ -46,10 +46,17 @@ public class CollectionBoxController {
     }
 
     // 6. Put (add) some money inside the collection box
-    @PatchMapping(value = "/{id}")
+    @PatchMapping(value = "/{id}/add")
     public ResponseEntity<Object> addMoneyToCollectionBox(@PathVariable Long id, @RequestBody MoneyAddRequestDto moneyAddRequestDto){
         CollectionBoxGetDto updated = collectionBoxService.addMoneyToCollectionBox(id, moneyAddRequestDto);
         return ResponseEntity.ok(String.format("Successfully added money to collection with id %s", updated.getId()));
+    }
+
+    // 7. Empty the collection box i.e. “transfer” money from the box to the fundraising event’s account
+    @PutMapping(value = "/{id}/transfer")
+    public ResponseEntity<Object> transferMoneyFromCollectionBox(@PathVariable Long id){
+        Long updatedEventId = collectionBoxService.transferMoneyFromCollectionBox(id);
+        return ResponseEntity.ok(String.format("Successfully transferred money from collection with the %s id, to the event with the %s id ", id, updatedEventId));
     }
 
 

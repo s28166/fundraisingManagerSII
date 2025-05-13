@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -26,5 +27,15 @@ public class FundraisingEventService {
         fundraisingEventRepository.save(fundraisingEvent);
 
         return new FundraisingEventGetDto(fundraisingEvent.getName(), fundraisingEvent.getBalance(), fundraisingEvent.getCurrency());
+    }
+
+    public List<FundraisingEventGetDto> getFundraisingEventsReport(){
+        return fundraisingEventRepository.findAll().stream().map(
+                e -> new FundraisingEventGetDto(
+                        e.getName(),
+                        e.getBalance(),
+                        e.getCurrency()
+                )
+        ).toList();
     }
 }

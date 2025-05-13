@@ -21,7 +21,7 @@ public class CollectionBox {
     @ManyToOne
     private FundraisingEvent fundraisingEvent;
 
-    private Boolean isEmpty;
+//    private Boolean isEmpty;
 
     @ElementCollection(fetch = FetchType.EAGER)
     @CollectionTable(name = "box_money")
@@ -30,16 +30,25 @@ public class CollectionBox {
     @MapKeyEnumerated(EnumType.STRING)
     private Map<Currency, BigDecimal> moneyInside;
 
-    @PrePersist
-    @PreUpdate
-    private void initialize() {
+
+    public CollectionBox() {
         moneyInside = new HashMap<>();
         for (Currency currency : Currency.values()) {
             moneyInside.put(currency, BigDecimal.ZERO);
         }
     }
+//    @PrePersist
+//    @PreUpdate
+//    private void initialize() {
+//        if (moneyInside == null) {
+//            moneyInside = new HashMap<>();
+//            for (Currency currency : Currency.values()) {
+//                moneyInside.put(currency, BigDecimal.ZERO);
+//            }
+//        }
+//    }
 
     public Boolean getIsEmpty() {
-        return moneyInside.values().stream().filter(a -> !a.equals(BigDecimal.ZERO)).toList().isEmpty();
+        return moneyInside.values().stream().filter(a -> a.compareTo(BigDecimal.ZERO) != 0).toList().isEmpty();
     }
 }

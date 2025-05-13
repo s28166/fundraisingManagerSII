@@ -5,6 +5,7 @@ import com.example.fundraisingmanagersii.dtos.MoneyAddRequestDto;
 import com.example.fundraisingmanagersii.exceptions.InvalidOperationException;
 import com.example.fundraisingmanagersii.exceptions.NotFoundException;
 import com.example.fundraisingmanagersii.models.CollectionBox;
+import com.example.fundraisingmanagersii.models.Currency;
 import com.example.fundraisingmanagersii.models.FundraisingEvent;
 import com.example.fundraisingmanagersii.repositories.CollectionBoxRepository;
 import com.example.fundraisingmanagersii.repositories.FundraisingEventRepository;
@@ -13,6 +14,7 @@ import org.springframework.stereotype.Service;
 import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
@@ -22,8 +24,8 @@ public class CollectionBoxService {
 
     public CollectionBoxGetDto registerNewCollectionBox(){
         CollectionBox box = new CollectionBox();
-        box.setIsEmpty(true);
-        box.setMoneyInside(new HashMap<>());
+//        box.setIsEmpty(true);
+//        box.setMoneyInside(new HashMap<>());
         box.setFundraisingEvent(null);
         collectionBoxRepository.save(box);
 
@@ -46,7 +48,7 @@ public class CollectionBoxService {
         return box.getId();
     }
 
-    public CollectionBoxGetDto assignToCollectionBox(long id, long eventId){
+    public CollectionBoxGetDto assignToCollectionBox(Long id, Long eventId){
         CollectionBox box = collectionBoxRepository.findById(id).orElseThrow(() -> new NotFoundException(String.format("Collection box with id %s not found", id)));
         FundraisingEvent event = fundraisingEventRepository.findById(eventId).orElseThrow(() -> new NotFoundException(String.format("Fundraising event with id %s not found", eventId)));
 
@@ -60,7 +62,7 @@ public class CollectionBoxService {
         return new CollectionBoxGetDto(box.getId(), (box.getFundraisingEvent() != null), box.getIsEmpty());
     }
 
-    public CollectionBoxGetDto addMoneyToCollectionBox(long id, MoneyAddRequestDto moneyAddRequestDto){
+    public CollectionBoxGetDto addMoneyToCollectionBox(Long id, MoneyAddRequestDto moneyAddRequestDto){
         if (moneyAddRequestDto.getAmount() == null || moneyAddRequestDto.getAmount().compareTo(BigDecimal.ZERO) <= 0){
             throw new InvalidOperationException("Money add amount must be greater than zero");
         }
@@ -73,6 +75,32 @@ public class CollectionBoxService {
         box.getMoneyInside().merge(moneyAddRequestDto.getCurrency(), moneyAddRequestDto.getAmount(), BigDecimal::add);
         collectionBoxRepository.save(box);
         return new CollectionBoxGetDto(box.getId(), (box.getFundraisingEvent() != null), box.getIsEmpty());
+    }
+
+    public Long transferMoneyFromCollectionBox(Long id){
+        CollectionBox box = collectionBoxRepository.findById(id).orElseThrow(() -> new NotFoundException(String.format("Collection box with id %s not found", id)));
+
+        if (box.getIsEmpty()){
+            throw new InvalidOperationException("Cannot transfer money from empty collection box");
+        }
+
+        FundraisingEvent event = box.getFundraisingEvent();
+        BigDecimal amountToTransfer = BigDecimal.ZERO;
+
+        for(Map.Entry<Currency, BigDecimal> entry : box.getMoneyInside().entrySet()){
+            BigDecimal converted = CurrencyConversionService.convert(
+                    entry.getKey(), event.getCurrency(), entry.getValue()
+            );
+            amountToTransfer = amountToTransfer.add(converted);
+        }
+
+        event.setBalance(event.getBalance().add(amountToTransfer));
+        fundraisingEventRepository.save(event);
+
+        box.getMoneyInside().values().forEach(a -> a = BigDecimal.ZERO);
+        collectionBoxRepository.save(box);
+
+        return event.getId();
     }
 
     // to remove -- Debug Only

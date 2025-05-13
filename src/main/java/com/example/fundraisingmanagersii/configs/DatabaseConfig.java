@@ -29,12 +29,12 @@ public class DatabaseConfig {
             logger.info("Preloading example fundraising event{}", fundraisingEventRepository.save(databaseEntryEvent));
             var databaseEntryBox = new CollectionBox();
 //            databaseEntryBox.setMoneyInside(new HashMap<>());
-            databaseEntryBox.setIsEmpty(true);
+//            databaseEntryBox.setIsEmpty(true);
             databaseEntryBox.setFundraisingEvent(databaseEntryEvent);
             logger.info("Preloading example collection box {}", collectionBoxRepository.save(databaseEntryBox));
             databaseEntryBox = new CollectionBox();
 //            databaseEntryBox.setMoneyInside(new HashMap<>());
-            databaseEntryBox.setIsEmpty(true);
+//            databaseEntryBox.setIsEmpty(true);
             databaseEntryBox.setFundraisingEvent(null);
             logger.info("Preloading example collection box {}", collectionBoxRepository.save(databaseEntryBox));
         };
