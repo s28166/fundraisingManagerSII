@@ -19,7 +19,7 @@ public class DatabaseConfig {
     @Bean
     CommandLineRunner loadExampleDatabase(CollectionBoxRepository collectionBoxRepository, FundraisingEventRepository fundraisingEventRepository) {
         return (args) -> {
-            logger.info("Loading example database...");
+/*            logger.info("Loading example database...");
             var databaseEntryEvent = new FundraisingEvent();
             databaseEntryEvent.setName("Caritas");
             databaseEntryEvent.setCurrency(Currency.PLN);
@@ -34,7 +34,7 @@ public class DatabaseConfig {
 //            databaseEntryBox.setMoneyInside(new HashMap<>());
 //            databaseEntryBox.setIsEmpty(true);
             databaseEntryBox.setFundraisingEvent(null);
-            logger.info("Preloading example collection box {}", collectionBoxRepository.save(databaseEntryBox));
+            logger.info("Preloading example collection box {}", collectionBoxRepository.save(databaseEntryBox));*/
         };
     }
 }
