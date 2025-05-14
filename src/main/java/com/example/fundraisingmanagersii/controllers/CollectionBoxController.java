@@ -2,7 +2,6 @@ package com.example.fundraisingmanagersii.controllers;
 
 import com.example.fundraisingmanagersii.dtos.CollectionBoxGetDto;
 import com.example.fundraisingmanagersii.dtos.MoneyAddRequestDto;
-import com.example.fundraisingmanagersii.models.CollectionBox;
 import com.example.fundraisingmanagersii.services.CollectionBoxService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;

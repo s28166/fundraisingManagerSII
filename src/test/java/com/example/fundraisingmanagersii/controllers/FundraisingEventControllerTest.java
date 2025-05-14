@@ -2,7 +2,6 @@ package com.example.fundraisingmanagersii.controllers;
 
 import com.example.fundraisingmanagersii.dtos.FundraisingEventCreateDto;
 import com.example.fundraisingmanagersii.models.Currency;
-import com.example.fundraisingmanagersii.services.CollectionBoxService;
 import com.example.fundraisingmanagersii.services.FundraisingEventService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
@@ -21,9 +20,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 public class FundraisingEventControllerTest {
     @Autowired
     private MockMvc mockMvc;
-
-    @Mock
-    private FundraisingEventService fundraisingEventService;
 
     @Autowired
     private ObjectMapper objectMapper;

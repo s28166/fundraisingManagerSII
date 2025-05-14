@@ -12,7 +12,6 @@ import com.example.fundraisingmanagersii.repositories.FundraisingEventRepository
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import java.math.BigDecimal;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -25,8 +24,6 @@ public class CollectionBoxService {
 
     public CollectionBoxGetDto registerNewCollectionBox(){
         CollectionBox box = new CollectionBox();
-//        box.setIsEmpty(true);
-//        box.setMoneyInside(new HashMap<>());
         box.setFundraisingEvent(null);
 
         CollectionBox saved = collectionBoxRepository.save(box);
@@ -108,17 +105,8 @@ public class CollectionBoxService {
         return event.getId();
     }
 
-    // to remove -- Debug Only
-    public List<CollectionBox> debugAllBoxes(){
+    // DEBUG method
+/*    public List<CollectionBox> debugAllBoxes(){
         return collectionBoxRepository.findAll().stream().toList();
-    }
-    
-    public Long clearMap(Long id){
-        CollectionBox box = collectionBoxRepository.findById(id).orElseThrow(() -> new NotFoundException(String.format("Collection box with id %s not found", id)));
-        for(Map.Entry<Currency, BigDecimal> entry : box.getMoneyInside().entrySet()){
-            entry.setValue(BigDecimal.ZERO);
-        }
-        collectionBoxRepository.save(box);
-        return box.getId();
-    }
+    }*/
 }

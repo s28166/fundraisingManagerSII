@@ -4,9 +4,7 @@ import jakarta.persistence.*;
 import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
-
 import java.math.BigDecimal;
-import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -20,8 +18,6 @@ public class CollectionBox {
 
     @ManyToOne
     private FundraisingEvent fundraisingEvent;
-
-//    private Boolean isEmpty;
 
     @ElementCollection(fetch = FetchType.EAGER)
     @CollectionTable(name = "box_money")
@@ -37,16 +33,6 @@ public class CollectionBox {
             moneyInside.put(currency, BigDecimal.ZERO);
         }
     }
-//    @PrePersist
-//    @PreUpdate
-//    private void initialize() {
-//        if (moneyInside == null) {
-//            moneyInside = new HashMap<>();
-//            for (Currency currency : Currency.values()) {
-//                moneyInside.put(currency, BigDecimal.ZERO);
-//            }
-//        }
-//    }
 
     public Boolean getIsEmpty() {
         return moneyInside.values().stream().filter(a -> a.compareTo(BigDecimal.ZERO) != 0).toList().isEmpty();

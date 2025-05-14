@@ -3,7 +3,6 @@ package com.example.fundraisingmanagersii.services;
 import com.example.fundraisingmanagersii.dtos.FundraisingEventCreateDto;
 import com.example.fundraisingmanagersii.dtos.FundraisingEventGetDto;
 import com.example.fundraisingmanagersii.exceptions.InvalidOperationException;
-import com.example.fundraisingmanagersii.models.Currency;
 import com.example.fundraisingmanagersii.models.FundraisingEvent;
 import com.example.fundraisingmanagersii.repositories.FundraisingEventRepository;
 import lombok.RequiredArgsConstructor;

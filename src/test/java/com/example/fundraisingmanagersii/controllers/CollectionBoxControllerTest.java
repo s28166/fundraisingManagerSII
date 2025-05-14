@@ -3,7 +3,6 @@ package com.example.fundraisingmanagersii.controllers;
 
 import com.example.fundraisingmanagersii.dtos.CollectionBoxGetDto;
 import com.example.fundraisingmanagersii.services.CollectionBoxService;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
