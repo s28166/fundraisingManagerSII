@@ -21,15 +21,17 @@ import java.util.Map;
 public class CollectionBoxService {
     private final CollectionBoxRepository collectionBoxRepository;
     private final FundraisingEventRepository fundraisingEventRepository;
+    private final CurrencyConversionService currencyConversionService;
 
     public CollectionBoxGetDto registerNewCollectionBox(){
         CollectionBox box = new CollectionBox();
 //        box.setIsEmpty(true);
 //        box.setMoneyInside(new HashMap<>());
         box.setFundraisingEvent(null);
-        collectionBoxRepository.save(box);
 
-        return new CollectionBoxGetDto(box.getId(), (box.getFundraisingEvent() != null), box.getIsEmpty());
+        CollectionBox saved = collectionBoxRepository.save(box);
+
+        return new CollectionBoxGetDto(saved.getId(), (saved.getFundraisingEvent() != null), saved.getIsEmpty());
     }
 
     public List<CollectionBoxGetDto> listAllCollectionBoxes(){
@@ -88,7 +90,7 @@ public class CollectionBoxService {
         BigDecimal amountToTransfer = BigDecimal.ZERO;
 
         for(Map.Entry<Currency, BigDecimal> entry : box.getMoneyInside().entrySet()){
-            BigDecimal converted = CurrencyConversionService.convert(
+            BigDecimal converted = currencyConversionService.convert(
                     entry.getKey(), event.getCurrency(), entry.getValue()
             );
             amountToTransfer = amountToTransfer.add(converted);
@@ -97,7 +99,10 @@ public class CollectionBoxService {
         event.setBalance(event.getBalance().add(amountToTransfer));
         fundraisingEventRepository.save(event);
 
-        box.getMoneyInside().values().forEach(a -> a = BigDecimal.ZERO);
+        for(Map.Entry<Currency, BigDecimal> entry : box.getMoneyInside().entrySet()){
+            entry.setValue(BigDecimal.ZERO);
+        }
+
         collectionBoxRepository.save(box);
 
         return event.getId();
@@ -110,7 +115,9 @@ public class CollectionBoxService {
     
     public Long clearMap(Long id){
         CollectionBox box = collectionBoxRepository.findById(id).orElseThrow(() -> new NotFoundException(String.format("Collection box with id %s not found", id)));
-        box.getMoneyInside().values().forEach(a -> a = BigDecimal.ZERO);
+        for(Map.Entry<Currency, BigDecimal> entry : box.getMoneyInside().entrySet()){
+            entry.setValue(BigDecimal.ZERO);
+        }
         collectionBoxRepository.save(box);
         return box.getId();
     }

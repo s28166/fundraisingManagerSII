@@ -17,7 +17,7 @@ public class FundraisingEventController {
     private final FundraisingEventService fundraisingEventService;
 
     //  1. Create a new fundraising event
-    @PostMapping
+    @PostMapping(value = "/create")
     public ResponseEntity<Object> createNewFundraisingEvent(@RequestBody FundraisingEventCreateDto dto){
         FundraisingEventGetDto created = fundraisingEventService.createNewFundraisingEvent(dto);
         return new ResponseEntity<>(String.format("Fundraising event created: %s", created.getName()), HttpStatus.CREATED);

@@ -3,6 +3,7 @@ package com.example.fundraisingmanagersii.services;
 import com.example.fundraisingmanagersii.dtos.FundraisingEventCreateDto;
 import com.example.fundraisingmanagersii.dtos.FundraisingEventGetDto;
 import com.example.fundraisingmanagersii.exceptions.InvalidOperationException;
+import com.example.fundraisingmanagersii.models.Currency;
 import com.example.fundraisingmanagersii.models.FundraisingEvent;
 import com.example.fundraisingmanagersii.repositories.FundraisingEventRepository;
 import lombok.RequiredArgsConstructor;
@@ -17,9 +18,10 @@ public class FundraisingEventService {
     private final FundraisingEventRepository fundraisingEventRepository;
 
     public FundraisingEventGetDto createNewFundraisingEvent(FundraisingEventCreateDto dto){
-        if (dto.getName() == null || dto.getCurrency() == null){
+        if (dto.getName() == null || dto.getCurrency() == null || dto.getName().trim().isEmpty()) {
             throw new InvalidOperationException("Name and currency are required");
         }
+
         FundraisingEvent fundraisingEvent = new FundraisingEvent();
         fundraisingEvent.setName(dto.getName());
         fundraisingEvent.setCurrency(dto.getCurrency());

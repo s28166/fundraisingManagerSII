@@ -18,7 +18,7 @@ public class CollectionBoxController {
     private final CollectionBoxService collectionBoxService;
 
     //2. Register a new collection box
-    @PostMapping
+    @PostMapping(value = "/register")
     public ResponseEntity<Object> registerNewCollectionBox(){
         CollectionBoxGetDto dto = collectionBoxService.registerNewCollectionBox();
         return new ResponseEntity<>(dto, HttpStatus.CREATED);
@@ -26,13 +26,13 @@ public class CollectionBoxController {
 
     // 3. List all collection boxes. Include information if the box is assigned (but don’t expose to what
     // fundraising event) and if it is empty or not (but don’t expose the actual value in the box)
-    @GetMapping
+    @GetMapping(value = "/list")
     public ResponseEntity<List<CollectionBoxGetDto>> getAllCollectionBoxes(){
         return ResponseEntity.ok(collectionBoxService.listAllCollectionBoxes());
     }
 
     // 4. Unregister (remove) a collection box (e.g. in case it was damaged or stolen)
-    @DeleteMapping(value = "/{id}")
+    @DeleteMapping(value = "/{id}/unregister")
     public ResponseEntity<Object> unregisterCollectionBox(@PathVariable("id") Long id){
         Long deletedId =  collectionBoxService.unregisterCollectionBox(id);
         return new ResponseEntity<>(String.format("Successfully deleted box with id %s", deletedId), HttpStatus.NO_CONTENT);
@@ -56,11 +56,11 @@ public class CollectionBoxController {
     @PutMapping(value = "/{id}/transfer")
     public ResponseEntity<Object> transferMoneyFromCollectionBox(@PathVariable Long id){
         Long updatedEventId = collectionBoxService.transferMoneyFromCollectionBox(id);
-        return ResponseEntity.ok(String.format("Successfully transferred money from collection with the %s id, to the event with the %s id ", id, updatedEventId));
+        return ResponseEntity.ok(String.format("Successfully transferred money from collection with id %s, to the event with the id %s", id, updatedEventId));
     }
 
-
-    @GetMapping(value = "/all")
+// DEBUG end points
+/*    @GetMapping(value = "/all")
     public ResponseEntity<List<CollectionBox>> getDebugAllCollectionBoxes(){
         return ResponseEntity.ok(collectionBoxService.debugAllBoxes());
     }
@@ -69,5 +69,5 @@ public class CollectionBoxController {
     public ResponseEntity<Object> clearMap(@PathVariable("id") Long id){
         Long deletedId =  collectionBoxService.clearMap(id);
         return new ResponseEntity<>(String.format("Successfully deleted box with id %s", deletedId), HttpStatus.NO_CONTENT);
-    }
+    }*/
 }
